@@ -6,13 +6,20 @@
 import { OWGames, OWGamesEvents } from "@overwolf/overwolf-api-ts/dist";
 import { kGamesFeatures } from "../consts";
 
+
+interface ActiveAlerts {
+  stack: boolean
+}
 // Like the background window, it also implements the Singleton design pattern.
 class InGame {
   private static _instance: InGame;
   private gameEventsListener: OWGamesEvents
+  private activeAlerts: ActiveAlerts;
 
   private constructor() {
-    console.log("Hello motherfcker")
+    this.activeAlerts = {
+      stack: true,
+    }
   }
 
   public static instace(): InGame {
@@ -24,11 +31,19 @@ class InGame {
   }
 
   private onInfoUpdates(info) {
-    console.log("Info carai", info)
+    console.log("Info", info)
   }
 
-  private onNewEvents(event) {
-    console.log("Evento caria", event)
+  private onNewEvents(e) {
+    e.events.map(event => {
+      switch (event.name) {
+        case 'clock_time_changed':
+          const parsedClockInfo = JSON.parse(event.data)
+          if (this.activeAlerts.stack) {
+            this.checkForStack(parsedClockInfo.clock_time)
+          }
+      }
+    });
   }
 
   public async run() {
@@ -49,6 +64,16 @@ class InGame {
 
     return isGameRunningAndAvailable ? info.classId : null
   }
+
+  private checkForStack(gameTime: number) {
+    const stackReminderTime = 15;
+    const stackTime = 60
+
+    if ((gameTime-stackReminderTime)%stackTime === 0) {
+      const audio = new Audio("../sound/stack.mp3")
+      audio.play();
+    }
+  } 
 }
 
 InGame.instace().run()
