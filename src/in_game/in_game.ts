@@ -10,6 +10,7 @@ import { kGamesFeatures } from "../consts";
 interface ActiveAlerts {
   stack: boolean
 }
+
 // Like the background window, it also implements the Singleton design pattern.
 class InGame {
   private static _instance: InGame;
