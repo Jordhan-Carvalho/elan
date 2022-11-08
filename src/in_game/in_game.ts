@@ -37,6 +37,14 @@ class InGame extends AppWindow{
           if (this.remindersConfig.stack.active) {
             this.checkForStack(parsedClockInfo.clock_time)
           }
+
+          if (this.remindersConfig.midrunes.active) {
+            this.checkForMidRunes(parsedClockInfo.clock_time)
+          }
+
+          if (this.remindersConfig.bountyrunes.active) {
+            this.checkForBountyRunes(parsedClockInfo.clock_time)
+          }
       }
     });
   }
@@ -71,6 +79,31 @@ class InGame extends AppWindow{
       audio.play();
     }
   } 
+
+  private checkForMidRunes(gameTime: number): void {
+    console.log("checkMidRunes called")
+    const midRunesTime = 120;
+    const midRunesAlertTime = this.remindersConfig['midrunes'].delay - midRunesTime 
+
+    if ((gameTime-midRunesAlertTime)%midRunesTime === 0) {
+      console.log("Inside the sound midrunes")
+      const audio = new Audio("../sound/mid-rune.mp3")
+      audio.play()
+    }
+  }
+
+  private checkForBountyRunes(gameTime: number): void {
+    console.log("checkBountyRunes called")
+    const bountyRunesTime = 180;
+    const bountyRunesAlertTime = this.remindersConfig['bountyrunes'].delay - bountyRunesTime 
+
+    if ((gameTime-bountyRunesAlertTime)%bountyRunesTime === 0) {
+      console.log("Inside the sound bounty runes")
+      const audio = new Audio("../sound/bounty-runes.mp3")
+      audio.play()
+    }
+  }
+
 }
 
 InGame.instace().run()
