@@ -15,9 +15,13 @@
   },
   "permissions": [
     "Hotkeys",
-    "GameInfo"
+    "GameInfo",
+    "Extensions",
+    "Streaming",
+    "Profile"
   ],
   "data": {
+    "protocol_override_domains" : {"googlesyndication" : "http"},
     "start_window": "background",
     "hotkeys": {
       "dota2reminders_showhide": {

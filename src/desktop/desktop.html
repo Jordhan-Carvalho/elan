@@ -11,18 +11,17 @@
   <!-- <link rel="stylesheet" href="../../css/ingame.css" /> -->
   <!-- <link rel="stylesheet" href="../../css/modal.css" /> -->
   <title>Dota 2 Reminders - Desktop page</title>
-    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="test()"></script>
+    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
     <script>
     let _owAd = null;
 
     // Setup a fallback timeout to check that onOwAdReady was called.
     // The owads.min.js might have been blocked.
     setTimeout(() => {
-      if (!owAd) {
+      if (!_owAd) {
         console.error("Couldn't load owads.min.js!");
       }
     }, 20000);
-
 
     function onOwAdReady() {
       if (!OwAd) {

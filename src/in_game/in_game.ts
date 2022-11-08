@@ -34,6 +34,7 @@ class InGame extends AppWindow{
       switch (event.name) {
         case 'clock_time_changed':
           const parsedClockInfo = JSON.parse(event.data);
+          console.log("Clock time", parsedClockInfo.clock_time)
           if (this.remindersConfig.stack.active) {
             this.checkForStack(parsedClockInfo.clock_time)
           }
@@ -74,7 +75,7 @@ class InGame extends AppWindow{
     const stackTime = 60
 
     if ((gameTime-stackReminderTime)%stackTime === 0) {
-      console.log("Inside the if checkStack")
+      console.log("Inside the if checkStack", { stackReminderTime, stackTime})
       const audio = new Audio("../sound/stack.mp3")
       audio.play();
     }
@@ -86,7 +87,7 @@ class InGame extends AppWindow{
     const midRunesAlertTime = this.remindersConfig['midrunes'].delay - midRunesTime 
 
     if ((gameTime-midRunesAlertTime)%midRunesTime === 0) {
-      console.log("Inside the sound midrunes")
+      console.log("Inside the sound midrunes", {midRunesTime, midRunesAlertTime})
       const audio = new Audio("../sound/mid-rune.mp3")
       audio.play()
     }
@@ -98,7 +99,7 @@ class InGame extends AppWindow{
     const bountyRunesAlertTime = this.remindersConfig['bountyrunes'].delay - bountyRunesTime 
 
     if ((gameTime-bountyRunesAlertTime)%bountyRunesTime === 0) {
-      console.log("Inside the sound bounty runes")
+      console.log("Inside the sound bounty runes", {bountyRunesTime, bountyRunesAlertTime})
       const audio = new Audio("../sound/bounty-runes.mp3")
       audio.play()
     }

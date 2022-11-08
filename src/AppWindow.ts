@@ -10,7 +10,7 @@ export class AppWindow {
   protected currWindow: OWWindow;
   protected mainWindow: OWWindow;
   protected maximized = false;
-  protected remindersConfig: RemindersConfig;
+  protected remindersConfig: RemindersConfig = {};
 
   constructor(windowName: string) {
     console.log("Contructor da appwindow")
@@ -87,6 +87,7 @@ export class AppWindow {
   } */
 
   private remindersConfigurationListener(reminderName: string) {
+    console.log("Dentro do config listener", reminderName)
     const checkBox = document.getElementById(`${reminderName}-checkbox`) as HTMLInputElement
     const delay = document.getElementById(`${reminderName}-delay`) as HTMLInputElement
 
