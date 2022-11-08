@@ -29,3 +29,11 @@ button {
 button:focus {
   outline: none;
 }
+
+/* #ad {
+  display: flex;
+  justify-content: center;
+  height: 300px;
+  max-width: 400px;
+  contain: layout;
+} */

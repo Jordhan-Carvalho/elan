@@ -1,7 +1,7 @@
 import { OWWindow } from "@overwolf/overwolf-api-ts";
 
 interface RemindersConfig {
-  stack: { active: boolean, delay: number }
+  [key: string]: { active: boolean, delay: number }
 }
 
 // A base class for the app's foreground windows.
@@ -9,9 +9,8 @@ interface RemindersConfig {
 export class AppWindow {
   protected currWindow: OWWindow;
   protected mainWindow: OWWindow;
-  protected maximized: boolean = false;
+  protected maximized = false;
   protected remindersConfig: RemindersConfig;
-  // protected alertsDelays:
 
   constructor(windowName: string) {
     console.log("Contructor da appwindow")
@@ -41,7 +40,12 @@ export class AppWindow {
       this.maximized = !this.maximized;
     });
 
-    this.remindersConfigListener()
+    this.setAppDragBehavior()
+
+    this.remindersConfigurationListener("neutral")
+    this.remindersConfigurationListener("stack")
+    this.remindersConfigurationListener("bountyrunes")
+    this.remindersConfigurationListener("midrunes")
 
   }
 
@@ -53,7 +57,16 @@ export class AppWindow {
     this.currWindow.dragMove(elem);
   }
 
-  private remindersConfigListener() {
+
+  private setAppDragBehavior() {
+    const body = document.querySelector('header')
+    const alertsContainer = document.querySelector('.alerts-container') as HTMLElement
+
+    this.setDrag(alertsContainer)
+    this.setDrag(body);
+  }
+
+  /* private remindersConfigListener() {
     const stackActiveCheckbox = document.getElementById('stack-checkbox') as HTMLInputElement
     const stackDelay = document.getElementById('stack-delay') as HTMLInputElement
     this.remindersConfig = { stack: { active: !stackActiveCheckbox.checked, delay: Number(stackDelay.value) } }
@@ -71,14 +84,24 @@ export class AppWindow {
       console.log("STACK DELAY VALUE", stackDelay.value)
       this.remindersConfig.stack.delay = Number(stackDelay.value)
     });
-  }
+  } */
 
-  private setAppDragBehavior() {
+  private remindersConfigurationListener(reminderName: string) {
+    const checkBox = document.getElementById(`${reminderName}-checkbox`) as HTMLInputElement
+    const delay = document.getElementById(`${reminderName}-delay`) as HTMLInputElement
 
-    const body = document.querySelector('header')
-    const alertsContainer = document.querySelector('.alerts-container') as HTMLElement
+    this.remindersConfig[reminderName] = { active: !checkBox.checked, delay: Number(delay.value)} 
 
-    this.setDrag(alertsContainer)
-    this.setDrag(body);
+    checkBox.addEventListener('change', () => {
+      if (checkBox.checked) {
+        this.remindersConfig[reminderName].active = false;
+      } else {
+        this.remindersConfig[reminderName].active = true;
+      }
+    })
+
+    delay.addEventListener('change', () => {
+      this.remindersConfig[reminderName].delay = Number(delay.value)
+    })
   }
 }

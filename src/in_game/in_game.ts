@@ -33,7 +33,7 @@ class InGame extends AppWindow{
     e.events.map(event => {
       switch (event.name) {
         case 'clock_time_changed':
-          const parsedClockInfo = JSON.parse(event.data)
+          const parsedClockInfo = JSON.parse(event.data);
           if (this.remindersConfig.stack.active) {
             this.checkForStack(parsedClockInfo.clock_time)
           }

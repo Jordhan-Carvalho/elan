@@ -1,0 +1,29 @@
+main {
+  height: calc(100% - 30px);
+  display: flex;
+  background-color: blue;
+}
+
+.alerts-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: green;
+  width: 50%;
+}
+
+.left-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: yellow;
+  width: 50%;
+}
+
+.plus-container{
+  background-color: white;
+}
+
+.ads-container{
+  background-color: red;
+}

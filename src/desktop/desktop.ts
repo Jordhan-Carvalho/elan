@@ -25,3 +25,4 @@ class Desktop extends AppWindow {
 }
 
 Desktop.instance().run()
+

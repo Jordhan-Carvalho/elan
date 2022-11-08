@@ -3,22 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" href="../../css/reset.css" />
-  <!-- <link rel="stylesheet" href="./in_game.css" /> -->
-  <!-- <link rel="stylesheet" href="../../css/header.css" />
-  <link rel="stylesheet" href="../../css/ingame.css" />
-  <link rel="stylesheet" href="../../css/modal.css" /> -->
+  <link rel="stylesheet" href="../../css/general.css" />
+  <link rel="stylesheet" href="../../css/header.css" />
+  <link rel="stylesheet" href="../../css/desktop.css" />
+  <link rel="stylesheet" href="../../css/switch.css" />
+  <link rel="stylesheet" href="../../css/checkbox.css" />
   <title>Dota 2 Reminders - In-Game page</title>
+    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="test()"></script>
+    <script>
+    let _owAd = null;
+
+    // Setup a fallback timeout to check that onOwAdReady was called.
+    // The owads.min.js might have been blocked.
+    setTimeout(() => {
+      if (!owAd) {
+        console.error("Couldn't load owads.min.js!");
+      }
+    }, 20000);
+
+
+    function onOwAdReady() {
+      if (!OwAd) {
+        // This scenario might happen if the user is running behind an ISP/public 
+        // router that might have detected the library as an ad and redirected the
+        // request to an error page.
+        // The app should decide how to handle this scenario (trigger an event, 
+        // fallback to a place holder etc...)
+        return;
+      }
+
+      // The creation of an OwAd object will automatically load an ad (so no need to
+      // call refreshAd here).
+      _owAd = new OwAd(document.getElementById("ad-div"));
+
+      _owAd.addEventListener('ow_internal_rendered', () => {
+        // It is now safe to call any API you want ( e.g. _owAd.refreshAd() or 
+        // _owAd.removeAd() )
+      });
+    }
+  </script>
 </head>
 <body class="in-game">
   <!-- -------------------------------- Header ------------------------------- -->
 
   <header id="header" class="app-header">
     <img src="../../img/header_icon.svg" />
-    <h1>Sample App / in-game window</h1>
-    <h1 class="hotkey-text">
+    <h1>Dota 2 Reminders / in-game</h1>
+    <!-- <h1 class="hotkey-text">
       Show/Hide Hotkey:
       <kbd id="hotkey"></kbd>
-    </h1>
+    </h1> -->
     <div class="window-controls-group">
       <button id="minimizeButton" class="window-control window-control-minimize" />
       <button id="maximizeButton" class="window-control window-control-maximize" />
@@ -26,49 +60,73 @@
     </div>
   </header>
 
-  <!-- --------------------------------- Main -------------------------------- -->
-  <!-- <main>
-    <div id="logs">
-      <div id="events" class="logColumn">
-        <h1>Game Events</h1>
-        <div id="eventsLog" class="dataText">
-        </div>
-      </div>
-      <div id="infoUpdates" class="logColumn">
-        <h1>Info Updates</h1>
-        <div id="infoLog" class="dataText"></div>
-      </div>
-    </div>
-    <div id="other">
-      <h1>Real-time Game Data</h1>
-      <p id="infoParagraph">
-        The background controller of this app is listening to all the game
-        events and info updates, and sends them to this window, that prints
-        them to the screen. Some specific events (Match Start/End, Kill and
-        Death) are painted in <span style="color: #00DEFA">teal</span> and
-        logged to the developers console.
-      </p>
-    </div>
-  </main> -->
-
+  <!-- -------------------------------- Main ------------------------------- -->
     <main>
       <div class="alerts-container">
         <h2>Set your reminders:</h2>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-        <p> Reminder  ----- X </p>
-      </div>
-      <div class="paid-container">
-        <div class="plus-container">
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="stack-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Stack Reminder</p>
         </div>
-        <div class="ad-container">
+
+
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="neutral-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Neutral Items Reminder</p>
+        </div>
+
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="midrunes-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Mid Runes Reminder</p>
+        </div>
+
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="bountyrunes-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Bounty Runes Reminder</p>
+        </div>
+      </div>
+
+  <!-- -------------------------------- Left Container ------------------------------- -->
+      <div class="left-container">
+        <div class="plus-container">
+          <h2>Set the reminder delay:</h2>
+          <label for="stackDelay">Stack Delay (0s and 30s):</label>
+          <input type="number" id="stack-delay" name="stackDelay" min="0" max="30" value="10" >
+          <label for="neutralDelay">Neutral Delay (0s and 30s):</label>
+          <input type="number" id="neutral-delay" name="neutralDelay" min="0" max="30" value="10" >
+
+          <label for="midrunesDelay">Mid runes Delay (0s and 30s):</label>
+          <input type="number" id="midrunes-delay" name="midrunesDelay" min="0" max="30" value="10" >
+          <label for="bountyrunesDelay">Bounty runes Delay (0s and 30s):</label>
+          <input type="number" id="bountyrunes-delay" name="bountyrunesDelay" min="0" max="30" value="10" >
+        </div>
+        <div id="ad-div" class="ad-container">
         </div>
       </div>
     </main>
-
 </body>
 </html>
