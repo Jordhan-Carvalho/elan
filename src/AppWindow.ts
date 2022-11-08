@@ -1,13 +1,20 @@
 import { OWWindow } from "@overwolf/overwolf-api-ts";
 
+interface RemindersConfig {
+  stack: { active: boolean, delay: number }
+}
+
 // A base class for the app's foreground windows.
 // Sets the modal and drag behaviors, which are shared accross the desktop and in-game windows.
 export class AppWindow {
   protected currWindow: OWWindow;
   protected mainWindow: OWWindow;
   protected maximized: boolean = false;
+  protected remindersConfig: RemindersConfig;
+  // protected alertsDelays:
 
   constructor(windowName: string) {
+    console.log("Contructor da appwindow")
     this.mainWindow = new OWWindow('background');
     this.currWindow = new OWWindow(windowName);
 
@@ -15,10 +22,6 @@ export class AppWindow {
     const maximizeButton = document.getElementById('maximizeButton');
     const minimizeButton = document.getElementById('minimizeButton');
 
-    // const header = document.getElementById('header');
-    const body = document.querySelector('body')
-
-    this.setDrag(body);
 
     closeButton.addEventListener('click', () => {
       this.mainWindow.close();
@@ -37,6 +40,9 @@ export class AppWindow {
 
       this.maximized = !this.maximized;
     });
+
+    this.remindersConfigListener()
+
   }
 
   // public async getWindowState() {
@@ -45,5 +51,34 @@ export class AppWindow {
 
   private async setDrag(elem: HTMLElement) {
     this.currWindow.dragMove(elem);
+  }
+
+  private remindersConfigListener() {
+    const stackActiveCheckbox = document.getElementById('stack-checkbox') as HTMLInputElement
+    const stackDelay = document.getElementById('stack-delay') as HTMLInputElement
+    this.remindersConfig = { stack: { active: !stackActiveCheckbox.checked, delay: Number(stackDelay.value) } }
+
+    stackActiveCheckbox.addEventListener('change', () => {
+      // checked will show the red button with a NO
+      if (stackActiveCheckbox.checked) {
+        this.remindersConfig.stack.active = false;
+       } else {
+        this.remindersConfig.stack.active = true;
+      }
+    }) 
+
+    stackDelay.addEventListener('change', () => {
+      console.log("STACK DELAY VALUE", stackDelay.value)
+      this.remindersConfig.stack.delay = Number(stackDelay.value)
+    });
+  }
+
+  private setAppDragBehavior() {
+
+    const body = document.querySelector('header')
+    const alertsContainer = document.querySelector('.alerts-container') as HTMLElement
+
+    this.setDrag(alertsContainer)
+    this.setDrag(body);
   }
 }

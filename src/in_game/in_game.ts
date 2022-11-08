@@ -4,23 +4,17 @@
 // The window also sets up Ctrl+F as the minimize/restore hotkey.
 
 import { OWGames, OWGamesEvents } from "@overwolf/overwolf-api-ts/dist";
-import { kGamesFeatures } from "../consts";
+import { AppWindow } from "../AppWindow";
+import { kGamesFeatures, kWindowNames } from "../consts";
 
-
-interface ActiveAlerts {
-  stack: boolean
-}
 
 // Like the background window, it also implements the Singleton design pattern.
-class InGame {
+class InGame extends AppWindow{
   private static _instance: InGame;
   private gameEventsListener: OWGamesEvents
-  private activeAlerts: ActiveAlerts;
 
   private constructor() {
-    this.activeAlerts = {
-      stack: true,
-    }
+    super(kWindowNames.inGame)
   }
 
   public static instace(): InGame {
@@ -40,7 +34,7 @@ class InGame {
       switch (event.name) {
         case 'clock_time_changed':
           const parsedClockInfo = JSON.parse(event.data)
-          if (this.activeAlerts.stack) {
+          if (this.remindersConfig.stack.active) {
             this.checkForStack(parsedClockInfo.clock_time)
           }
       }
@@ -67,10 +61,12 @@ class InGame {
   }
 
   private checkForStack(gameTime: number) {
+    console.log("checkForStack called")
     const stackReminderTime = 15;
     const stackTime = 60
 
     if ((gameTime-stackReminderTime)%stackTime === 0) {
+      console.log("Inside the if checkStack")
       const audio = new Audio("../sound/stack.mp3")
       audio.play();
     }
