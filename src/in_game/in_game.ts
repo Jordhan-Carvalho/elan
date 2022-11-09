@@ -35,6 +35,7 @@ class InGame extends AppWindow{
         case 'clock_time_changed':
           const parsedClockInfo = JSON.parse(event.data);
           console.log("Clock time", parsedClockInfo.clock_time)
+// TODO: there should be a check if game already started
           if (this.remindersConfig.stack.active) {
             this.checkForStack(parsedClockInfo.clock_time)
           }
@@ -71,11 +72,11 @@ class InGame extends AppWindow{
 
   private checkForStack(gameTime: number) {
     console.log("checkForStack called")
-    const stackReminderTime = 15;
     const stackTime = 60
+    const stackAlertTime = stackTime - this.remindersConfig['stack'].delay
 
-    if ((gameTime-stackReminderTime)%stackTime === 0) {
-      console.log("Inside the if checkStack", { stackReminderTime, stackTime})
+    if ((gameTime-stackAlertTime)%stackTime === 0) {
+      console.log("Inside the if checkStack", { stackAlertTime, stackTime})
       const audio = new Audio("../sound/stack.mp3")
       audio.play();
     }
@@ -84,7 +85,7 @@ class InGame extends AppWindow{
   private checkForMidRunes(gameTime: number): void {
     console.log("checkMidRunes called")
     const midRunesTime = 120;
-    const midRunesAlertTime = this.remindersConfig['midrunes'].delay - midRunesTime 
+    const midRunesAlertTime = midRunesTime - this.remindersConfig['midrunes'].delay
 
     if ((gameTime-midRunesAlertTime)%midRunesTime === 0) {
       console.log("Inside the sound midrunes", {midRunesTime, midRunesAlertTime})
@@ -96,7 +97,7 @@ class InGame extends AppWindow{
   private checkForBountyRunes(gameTime: number): void {
     console.log("checkBountyRunes called")
     const bountyRunesTime = 180;
-    const bountyRunesAlertTime = this.remindersConfig['bountyrunes'].delay - bountyRunesTime 
+    const bountyRunesAlertTime = bountyRunesTime - this.remindersConfig['bountyrunes'].delay
 
     if ((gameTime-bountyRunesAlertTime)%bountyRunesTime === 0) {
       console.log("Inside the sound bounty runes", {bountyRunesTime, bountyRunesAlertTime})
