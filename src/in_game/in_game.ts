@@ -12,6 +12,7 @@ import { kGamesFeatures, kWindowNames } from "../consts";
 class InGame extends AppWindow{
   private static _instance: InGame;
   private gameEventsListener: OWGamesEvents
+  private lastWardCall = 0
 
   private constructor() {
     super(kWindowNames.inGame)
@@ -26,7 +27,6 @@ class InGame extends AppWindow{
   }
 
   private onInfoUpdates(info) {
-    console.log("Info", info)
   }
 
   private onNewEvents(e) {
@@ -34,19 +34,37 @@ class InGame extends AppWindow{
       switch (event.name) {
         case 'clock_time_changed':
           const parsedClockInfo = JSON.parse(event.data);
-          console.log("Clock time", parsedClockInfo.clock_time)
-// TODO: there should be a check if game already started
-          if (this.remindersConfig.stack.active) {
-            this.checkForStack(parsedClockInfo.clock_time)
-          }
+          if (parsedClockInfo.clock_time > 0) {
 
-          if (this.remindersConfig.midrunes.active) {
-            this.checkForMidRunes(parsedClockInfo.clock_time)
-          }
+            if (this.remindersConfig.stack.active) {
+              this.checkForStack(parsedClockInfo.clock_time)
+            }
 
-          if (this.remindersConfig.bountyrunes.active) {
-            this.checkForBountyRunes(parsedClockInfo.clock_time)
+            if (this.remindersConfig.midrunes.active) {
+              this.checkForMidRunes(parsedClockInfo.clock_time)
+            }
+
+            if (this.remindersConfig.bountyrunes.active) {
+              this.checkForBountyRunes(parsedClockInfo.clock_time)
+            }
+
+            if (this.remindersConfig.neutral.active) {
+              this.checkNeutralItems(parsedClockInfo.clock_time)
+            }
+
+            if (this.remindersConfig.smoke.active) {
+              this.checkForSmoke(parsedClockInfo.clock_time)
+            }
           }
+          break;
+        case 'ward_purchase_cooldown_changed':
+          const parsedWardData = JSON.parse(event.data)
+          if (this.remindersConfig.ward.active) {
+            this.checkForWard(parsedWardData.ward_purchase_cooldown)
+          }
+          break;
+        case 'match_ended':
+          this.lastWardCall = 0
       }
     });
   }
@@ -71,38 +89,65 @@ class InGame extends AppWindow{
   }
 
   private checkForStack(gameTime: number) {
-    console.log("checkForStack called")
     const stackTime = 60
     const stackAlertTime = stackTime - this.remindersConfig['stack'].delay
 
     if ((gameTime-stackAlertTime)%stackTime === 0) {
-      console.log("Inside the if checkStack", { stackAlertTime, stackTime})
       const audio = new Audio("../sound/stack.mp3")
       audio.play();
     }
   } 
 
   private checkForMidRunes(gameTime: number): void {
-    console.log("checkMidRunes called")
     const midRunesTime = 120;
     const midRunesAlertTime = midRunesTime - this.remindersConfig['midrunes'].delay
 
     if ((gameTime-midRunesAlertTime)%midRunesTime === 0) {
-      console.log("Inside the sound midrunes", {midRunesTime, midRunesAlertTime})
       const audio = new Audio("../sound/mid-rune.mp3")
       audio.play()
     }
   }
 
   private checkForBountyRunes(gameTime: number): void {
-    console.log("checkBountyRunes called")
     const bountyRunesTime = 180;
     const bountyRunesAlertTime = bountyRunesTime - this.remindersConfig['bountyrunes'].delay
 
     if ((gameTime-bountyRunesAlertTime)%bountyRunesTime === 0) {
-      console.log("Inside the sound bounty runes", {bountyRunesTime, bountyRunesAlertTime})
       const audio = new Audio("../sound/bounty-runes.mp3")
       audio.play()
+    }
+  }
+
+  private checkNeutralItems(gameTime: number) {
+    const neutralItemsTime = [420, 1020, 1620, 2200, 3600]
+
+    for (let i = 0; i < neutralItemsTime.length; i++) {
+      if (gameTime === neutralItemsTime[i]) {
+        const audio = new Audio(`../sound/neutralTier${i+1}.mp3`)
+        audio.play()
+      }
+    }
+  }
+
+  private checkForSmoke(gameTime: number) {
+    const smokeTime = 420
+    const smokeAlertTime = smokeTime - this.remindersConfig['smoke'].delay
+
+    if((gameTime-smokeAlertTime)%smokeTime === 0) {
+      const audio = new Audio("../sound/smoke.mp3")
+      audio.play();
+    }
+
+  }
+
+  private checkForWard(wardCd: number) {
+    const timeBetweenCalls = 30
+
+    const now = Math.round(new Date().getTime() / 1000)
+    if (wardCd === 0 && this.lastWardCall+timeBetweenCalls <= now) {
+      const audio = new Audio("../sound/wards.mp3")
+      audio.play();
+      this.lastWardCall = now;
     }
   }
 

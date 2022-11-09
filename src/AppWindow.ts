@@ -46,6 +46,8 @@ export class AppWindow {
     this.remindersConfigurationListener("stack")
     this.remindersConfigurationListener("bountyrunes")
     this.remindersConfigurationListener("midrunes")
+    this.remindersConfigurationListener("smoke")
+    this.remindersConfigurationListener("ward")
 
   }
 
@@ -87,12 +89,7 @@ export class AppWindow {
   } */
 
   private remindersConfigurationListener(reminderName: string) {
-    console.log("Dentro do config listener", reminderName)
     const checkBox = document.getElementById(`${reminderName}-checkbox`) as HTMLInputElement
-    const delay = document.getElementById(`${reminderName}-delay`) as HTMLInputElement
-
-    this.remindersConfig[reminderName] = { active: !checkBox.checked, delay: Number(delay.value)} 
-
     checkBox.addEventListener('change', () => {
       if (checkBox.checked) {
         this.remindersConfig[reminderName].active = false;
@@ -101,8 +98,12 @@ export class AppWindow {
       }
     })
 
-    delay.addEventListener('change', () => {
-      this.remindersConfig[reminderName].delay = Number(delay.value)
+    const delayElem = document.getElementById(`${reminderName}-delay`) as HTMLInputElement
+    const delay = delayElem ? Number(delayElem.value) : 0
+    this.remindersConfig[reminderName] = { active: !checkBox.checked, delay} 
+
+    delayElem && delayElem.addEventListener('change', () => {
+      this.remindersConfig[reminderName].delay = Number(delayElem.value)
     })
   }
 }

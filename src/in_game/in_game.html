@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../../css/switch.css" />
   <link rel="stylesheet" href="../../css/checkbox.css" />
   <title>Dota 2 Reminders - In-Game page</title>
-    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="test()"></script>
+    <script src="https://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
     <script>
     let _owAd = null;
 
@@ -108,6 +108,28 @@
             </div>
           <p>Bounty Runes Reminder</p>
         </div>
+
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="smoke-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Buy Smoke Reminder</p>
+        </div>
+
+        <div class="checkbox-container" >
+            <div class="button b2" id="button-13">
+              <input type="checkbox" class="checkbox" id="ward-checkbox" />
+              <div class="knobs">
+                <span></span>
+              </div>
+              <div class="layer"></div>
+            </div>
+          <p>Buy Wards Reminder</p>
+        </div>
       </div>
 
   <!-- -------------------------------- Left Container ------------------------------- -->
@@ -115,14 +137,18 @@
         <div class="plus-container">
           <h2>Set the reminder delay:</h2>
           <label for="stackDelay">Stack Delay (seconds):</label>
-          <input type="number" id="stack-delay" name="stackDelay" min="0" max="30" value="10" >
+          <input type="number" id="stack-delay" name="stackDelay" min="0" max="30" value="14" >
+
           <label for="neutralDelay">Neutral Delay (0s and 30s):</label>
-          <input type="number" id="neutral-delay" name="neutralDelay" min="0" max="30" value="10" >
+          <input type="number" id="neutral-delay" name="neutralDelay" min="0" max="30" value="0" >
 
           <label for="midrunesDelay">Mid runes Delay (0s and 30s):</label>
-          <input type="number" id="midrunes-delay" name="midrunesDelay" min="0" max="30" value="10" >
+          <input type="number" id="midrunes-delay" name="midrunesDelay" min="0" max="30" value="5" >
           <label for="bountyrunesDelay">Bounty runes Delay (0s and 30s):</label>
-          <input type="number" id="bountyrunes-delay" name="bountyrunesDelay" min="0" max="30" value="10" >
+          <input type="number" id="bountyrunes-delay" name="bountyrunesDelay" min="0" max="30" value="7" >
+
+          <label for="smokeDelay">Buy smoke Delay:</label>
+          <input type="number" id="smoke-delay" name="smokeDelay" min="0" max="10" value="1" >
         </div>
         <div id="ad-div" class="ad-container">
         </div>

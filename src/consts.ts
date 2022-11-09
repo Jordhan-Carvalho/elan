@@ -3,14 +3,14 @@ export const kGamesFeatures = new Map<number, string[]>([
   [
     7314,
     [
-      'game_state_changed',
+      /* 'game_state_changed',
       'match_state_changed',
       'match_detected',
-      'daytime_changed',
+      'daytime_changed', */
       'clock_time_changed',
       'ward_purchase_cooldown_changed',
       'match_ended',
-      'kill',
+      /* 'kill',
       'assist',
       'death',
       'cs',
@@ -32,14 +32,14 @@ export const kGamesFeatures = new Map<number, string[]>([
       'hero_item_changed',
       'hero_item_used',
       'hero_item_consumed',
-      'hero_item_charged',
+      'hero_item_charged', */
       'match_info',
-      'roster',
+      /* 'roster',
       'party',
       'error',
       'hero_pool',
       'me',
-      'game'
+      'game' */
     ]
   ],
 ]);
