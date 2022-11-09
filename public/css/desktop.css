@@ -9,7 +9,7 @@ main {
   flex-direction: column;
   height: 100%;
   background-color: green;
-  width: 50%;
+  width: 100%;
 }
 
 .left-container{
@@ -17,11 +17,11 @@ main {
   flex-direction: column;
   height: 100%;
   background-color: yellow;
-  width: 50%;
 }
 
 .plus-container{
   background-color: white;
+  width: 400px;
 }
 
 .ads-container{

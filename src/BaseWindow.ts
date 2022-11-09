@@ -6,14 +6,13 @@ interface RemindersConfig {
 
 // A base class for the app's foreground windows.
 // Sets the modal and drag behaviors, which are shared accross the desktop and in-game windows.
-export class AppWindow {
+export class BaseWindow {
   protected currWindow: OWWindow;
   protected mainWindow: OWWindow;
   protected maximized = false;
   protected remindersConfig: RemindersConfig = {};
 
   constructor(windowName: string) {
-    console.log("Contructor da appwindow")
     this.mainWindow = new OWWindow('background');
     this.currWindow = new OWWindow(windowName);
 
@@ -51,14 +50,13 @@ export class AppWindow {
 
   }
 
-  // public async getWindowState() {
-  //   return await this.currWindow.getWindowState();
-  // }
-
   private async setDrag(elem: HTMLElement) {
     this.currWindow.dragMove(elem);
   }
 
+  public async getWindowState() {
+    return await this.currWindow.getWindowState();
+  }
 
   private setAppDragBehavior() {
     const body = document.querySelector('header')
@@ -68,27 +66,8 @@ export class AppWindow {
     this.setDrag(body);
   }
 
-  /* private remindersConfigListener() {
-    const stackActiveCheckbox = document.getElementById('stack-checkbox') as HTMLInputElement
-    const stackDelay = document.getElementById('stack-delay') as HTMLInputElement
-    this.remindersConfig = { stack: { active: !stackActiveCheckbox.checked, delay: Number(stackDelay.value) } }
-
-    stackActiveCheckbox.addEventListener('change', () => {
-      // checked will show the red button with a NO
-      if (stackActiveCheckbox.checked) {
-        this.remindersConfig.stack.active = false;
-       } else {
-        this.remindersConfig.stack.active = true;
-      }
-    }) 
-
-    stackDelay.addEventListener('change', () => {
-      console.log("STACK DELAY VALUE", stackDelay.value)
-      this.remindersConfig.stack.delay = Number(stackDelay.value)
-    });
-  } */
-
   private remindersConfigurationListener(reminderName: string) {
+    console.log("run the configuration listener")
     const checkBox = document.getElementById(`${reminderName}-checkbox`) as HTMLInputElement
     checkBox.addEventListener('change', () => {
       if (checkBox.checked) {
@@ -106,4 +85,6 @@ export class AppWindow {
       this.remindersConfig[reminderName].delay = Number(delayElem.value)
     })
   }
+
+
 }

@@ -3,19 +3,23 @@
 // and writes them to the relevant log using <pre> tags.
 // The window also sets up Ctrl+F as the minimize/restore hotkey.
 
-import { OWGames, OWGamesEvents } from "@overwolf/overwolf-api-ts/dist";
-import { AppWindow } from "../AppWindow";
-import { kGamesFeatures, kWindowNames } from "../consts";
+import { OWGames, OWGamesEvents, OWHotkeys } from "@overwolf/overwolf-api-ts/dist";
+import { BaseWindow } from "../BaseWindow";
+import { kGamesFeatures, kHotkeys, kWindowNames } from "../consts";
 
+import WindowState = overwolf.windows.WindowStateEx;
 
 // Like the background window, it also implements the Singleton design pattern.
-class InGame extends AppWindow{
+class InGame extends BaseWindow{
   private static _instance: InGame;
   private gameEventsListener: OWGamesEvents
   private lastWardCall = 0
 
   private constructor() {
     super(kWindowNames.inGame)
+
+    this.setToggleHotkeyBehavior();
+    this.setToggleHotkeyText();
   }
 
   public static instace(): InGame {
@@ -151,6 +155,35 @@ class InGame extends AppWindow{
     }
   }
 
+  // Displays the toggle minimize/restore hotkey in the window header
+  private async setToggleHotkeyText() {
+    const gameClassId = await this.getCurrentGameClassId();
+    console.log("Game class Id", {gameClassId, treco: kHotkeys.toggle})
+    const hotkeyText = await OWHotkeys.getHotkeyText(kHotkeys.toggle, gameClassId);
+    console.log("Hotkey TEXT CARAI", hotkeyText)
+    const hotkeyElem = document.getElementById('hotkey');
+    hotkeyElem.textContent = hotkeyText;
+  }
+
+  // Sets toggleInGameWindow as the behavior for the Ctrl+F hotkey
+  private async setToggleHotkeyBehavior() {
+    const toggleInGameWindow = async (
+      hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent
+    ): Promise<void> => {
+      console.log(`pressed hotkey for ${hotkeyResult.name}`);
+      const inGameState = await this.getWindowState();
+
+      if (inGameState.window_state === WindowState.NORMAL ||
+        inGameState.window_state === WindowState.MAXIMIZED) {
+        this.currWindow.minimize();
+      } else if (inGameState.window_state === WindowState.MINIMIZED ||
+        inGameState.window_state === WindowState.CLOSED) {
+        this.currWindow.restore();
+      }
+    }
+
+    OWHotkeys.onHotkeyDown(kHotkeys.toggle, toggleInGameWindow);
+  }
 }
 
 InGame.instace().run()

@@ -1,15 +1,18 @@
 main {
-  height: calc(100% - 30px);
+  /* height: calc(100% - 50px); */
   display: flex;
   background-color: blue;
+  padding: 20px;
 }
 
 .alerts-container{
   display: flex;
   flex-direction: column;
-  height: 100%;
   background-color: green;
-  width: 50%;
+  width: 100%;
+  padding: 15px;
+  margin-right: 20px;
+  border-radius: 6px;
 }
 
 .left-container{
@@ -17,13 +20,18 @@ main {
   flex-direction: column;
   height: 100%;
   background-color: yellow;
-  width: 50%;
 }
 
 .plus-container{
   background-color: white;
+  border-radius: 6px;
+  padding: 15px;
+  max-width: 400px;
+  margin-bottom: 20px;
 }
 
 .ads-container{
   background-color: red;
+  border-radius: 6px;
+  padding: 15px;
 }
